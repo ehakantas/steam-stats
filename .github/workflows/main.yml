@@ -1,7 +1,7 @@
 name: steam-stats
 on:
   schedule:
-    - cron: "0 9 * * *"
+    - cron: "0 9,21 * * *"
   workflow_dispatch:
 permissions:
   contents: write
