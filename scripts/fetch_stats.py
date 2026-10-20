@@ -36,7 +36,8 @@ items = [{
     "url": f"https://steamcommunity.com/sharedfiles/filedetails/?id={d['publishedfileid']}",
 } for d in details]
 
-news = get("ISteamNews/GetNewsForApp/v2/", {"appid": APPID, "count": 10, "maxlength": 1500}).get("appnews", {}).get("newsitems", [])
+#news = get("ISteamNews/GetNewsForApp/v2/", {"appid": APPID, "count": 10, "maxlength": 1500}).get("appnews", {}).get("newsitems", [])
+news = get("ISteamNews/GetNewsForApp/v2/", {"appid": APPID, "count": 10, "maxlength": 1500, "feeds": "steam_community_announcements"}).get("appnews", {}).get("newsitems", [])
 news = [{"title": n["title"], "date": n["date"], "url": n["url"], "text": n["contents"]} for n in news]
 
 os.makedirs("data", exist_ok=True)
