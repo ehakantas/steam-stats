@@ -32,7 +32,7 @@ items = [{
     "id": d["publishedfileid"], "title": d.get("title"),
     "subscribers": d.get("subscriptions"), "favorites": d.get("favorited"),
     "views": d.get("views"), "comments": d.get("num_comments_public"),
-    "time_updated": d.get("time_updated"),
+    "time_updated": d.get("time_updated"), "creator": d.get("creator"),
     "url": f"https://steamcommunity.com/sharedfiles/filedetails/?id={d['publishedfileid']}",
 } for d in details]
 

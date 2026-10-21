@@ -25,6 +25,22 @@ cur = [{"id": i["id"], "title": i["title"], "subs": i["subscribers"], "favs": i[
 P = {p["id"]: p for p in prev}
 C = {c["id"]: c for c in cur}
 
+# Optional comment stats (data/comments.json, written by fetch_comments.py).
+# Missing or unreadable file -> everything below behaves exactly as before.
+try:
+    comments = json.load(open(os.path.join(here, "..", "data", "comments.json"))).get("items", {})
+except (OSError, ValueError):
+    comments = {}
+
+
+def comment_ctx(item_id):
+    c = comments.get(item_id)
+    if not c:
+        return ""
+    kw = ", ".join(f"{k}×{v}" for k, v in sorted((c.get("new_keywords") or {}).items(), key=lambda x: -x[1]))
+    return f" Comments: {c.get('new_since_last', 0)} new since last fetch" + (f" ({kw})" if kw else "") + "."
+
+
 alerts = [f"🟠 REMOVED/HIDDEN: {p['title']} ({p['id']}) missing vs run {L}; likely hidden/removed on Workshop; check the item page."
           for p in prev if p["id"] not in C]
 deltas = []
@@ -32,7 +48,7 @@ for c in cur:
     d = c["subs"] - P[c["id"]]["subs"] if c["id"] in P else None
     deltas.append((c, d))
     if d is not None and d < 0:
-        alerts.append(f"🟡 SUBS DROP: {c['title']} {P[c['id']]['subs']}→{c['subs']} ({d}); likely unsubscribes after an update or game patch; check comments.")
+        alerts.append(f"🟡 SUBS DROP: {c['title']} {P[c['id']]['subs']}→{c['subs']} ({d}); likely unsubscribes after an update or game patch; check comments." + comment_ctx(c["id"]))
 if patch:
     alerts.append(patch)
 
@@ -55,4 +71,7 @@ print(f"SNAPSHOT {utc(g):%Y-%m-%d %H:%M} UTC, {age:.1f} h old"
 print(f"TOTAL_SUBS {tot} ({tot - ptot:+d} vs run {L})" if prev else f"TOTAL_SUBS {tot} (no previous run)")
 print(f"TOP_MOVER {top[0]['title']} {top[1]:+d}" if top and top[1] else "TOP_MOVER none")
 print("ALERTS " + (" || ".join(alerts) if alerts else "none"))
+if comments:
+    print("NEW_COMMENTS " + (" || ".join(f"{v['title']} +{v['new_since_last']} (total {v.get('total')})"
+                                         for v in comments.values() if v.get("new_since_last")) or "none"))
 print("NEW_NEWS " + (" || ".join(f"{utc(x['date']):%Y-%m-%d} {x['title']}" for x in new_news) or "none"))
