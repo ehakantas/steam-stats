@@ -21,7 +21,8 @@ import urllib.error
 import urllib.parse
 import urllib.request
 from collections import Counter
-from datetime import datetime, timezone
+from datetime import datetime
+from zoneinfo import ZoneInfo
 from html.parser import HTMLParser
 
 RENDER = "https://steamcommunity.com/comment/PublishedFile_Public/render/{owner}/{feature}/"
@@ -33,11 +34,18 @@ MAX_PAGES = 30        # ilk çalıştırmada üst sınır (30 x 50 = 1500 yorum)
 SLEEP_SECONDS = 1.0   # istekler arası bekleme
 SEEN_LIMIT = 5000     # mod başına saklanan hash sayısı üst sınırı
 
-# Şikâyet/yama bağlamı için anahtar kelimeler (küçük harfe çevrilmiş metinde aranır).
-KEYWORDS = [
+# Anahtar kelimeler (küçük harfe çevrilmiş metinde, kelime BAŞINDAN eşleşir:
+# "bug" -> "bug", "bugs", "buggy" eşleşir; "debug" eşleşmez. "crash" -> "crashes", "crashing").
+# COMPLAINT_KEYWORDS günlük raporda uyarı üretir; INFO_KEYWORDS yalnızca bilgi olarak sayılır
+# (bunlar "update için teşekkürler" gibi olumlu yorumlarda da geçer).
+COMPLAINT_KEYWORDS = [
     "crash", "broken", "bug", "not working", "doesn't work", "doesnt work",
-    "error", "freeze", "stuck", "patch", "update", "fix",
+    "error", "freeze", "stuck",
 ]
+INFO_KEYWORDS = ["patch", "update", "fix"]
+KEYWORDS = COMPLAINT_KEYWORDS + INFO_KEYWORDS
+_KW_RE = {kw: re.compile(r"\b" + re.escape(kw)) for kw in KEYWORDS}
+TR = ZoneInfo("Europe/Istanbul")
 
 
 # --------------------------------------------------------------------------
@@ -178,18 +186,19 @@ def keyword_counts(comments):
     """Her anahtar kelimeyi kaç yorumun içerdiğini sayar."""
     c = Counter()
     for cm in comments:
-        t = cm["text"].lower()
-        for kw in KEYWORDS:
-            if kw in t:
+        t = cm["text"].lower().replace("’", "'")  # kıvrık kesme işareti: doesn’t -> doesn't
+        for kw, rx in _KW_RE.items():
+            if rx.search(t):
                 c[kw] += 1
     return dict(c)
 
 
 def day_counts(comments):
+    """Yorumları İstanbul (TR) takvim gününe göre sayar."""
     c = Counter()
     for cm in comments:
         if cm["ts"]:
-            c[datetime.fromtimestamp(cm["ts"], timezone.utc).strftime("%Y-%m-%d")] += 1
+            c[datetime.fromtimestamp(cm["ts"], TR).strftime("%Y-%m-%d")] += 1
     return dict(c)
 
 
