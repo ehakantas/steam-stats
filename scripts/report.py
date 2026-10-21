@@ -4,7 +4,7 @@ usage: python3 scripts/report.py STATE_JSON OUTDIR [PATCH_ALERT]
   STATE_JSON  dashboard meta/state document (must contain last_run, last_generated_at; last_items optional)
   OUTDIR      writes run.json (new runs/rNNN doc) and state.json (meta/state update)
   PATCH_ALERT optional extra alert line (PC patch that may break mods)
-Prints a short summary for the task's reply.
+Prints a short summary for the task's reply. All printed dates/times are Istanbul time (TR).
 """
 import datetime, json, os, sys, time, zoneinfo
 
@@ -40,7 +40,9 @@ tot = sum(c["subs"] for c in cur)
 ptot = sum(p["subs"] for p in prev)
 top = max(((c, d) for c, d in deltas if d is not None), key=lambda x: x[1], default=None)
 new_news = [x for x in stats.get("news", []) if x["date"] > state["last_generated_at"]]
-today = datetime.datetime.now(zoneinfo.ZoneInfo("Europe/Istanbul")).date().isoformat()
+TR = zoneinfo.ZoneInfo("Europe/Istanbul")
+tr = lambda t: datetime.datetime.fromtimestamp(t, TR)
+today = datetime.datetime.now(TR).date().isoformat()
 
 os.makedirs(out, exist_ok=True)
 json.dump({"run": n, "date": today, "generated_at": g, "items": cur},
@@ -48,11 +50,10 @@ json.dump({"run": n, "date": today, "generated_at": g, "items": cur},
 json.dump({"last_run": n, "last_generated_at": g, "last_checked": today, "alerts": alerts, "last_items": cur},
           open(os.path.join(out, "state.json"), "w"), ensure_ascii=False)
 
-utc = lambda t: datetime.datetime.fromtimestamp(t, datetime.timezone.utc)
 print(f"RUN_DOC r{n:03d}")
-print(f"SNAPSHOT {utc(g):%Y-%m-%d %H:%M} UTC, {age:.1f} h old"
+print(f"SNAPSHOT {tr(g):%Y-%m-%d %H:%M} TR, {age:.1f} h old"
       + (" | STALE" if age > 36 else "") + (" | UNCHANGED" if g == state["last_generated_at"] else ""))
 print(f"TOTAL_SUBS {tot} ({tot - ptot:+d} vs run {L})" if prev else f"TOTAL_SUBS {tot} (no previous run)")
 print(f"TOP_MOVER {top[0]['title']} {top[1]:+d}" if top and top[1] else "TOP_MOVER none")
 print("ALERTS " + (" || ".join(alerts) if alerts else "none"))
-print("NEW_NEWS " + (" || ".join(f"{utc(x['date']):%Y-%m-%d} {x['title']}" for x in new_news) or "none"))
+print("NEW_NEWS " + (" || ".join(f"{tr(x['date']):%Y-%m-%d} {x['title']}" for x in new_news) or "none"))
