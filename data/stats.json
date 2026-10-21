@@ -1,12 +1,12 @@
 {
- "generated_at": 1792560180,
+ "generated_at": 1792567436,
  "items": [
   {
    "id": "3823470755",
    "title": "Floating Damage Numbers [Remastered]",
-   "subscribers": 27,
-   "favorites": 1,
-   "views": 138,
+   "subscribers": 32,
+   "favorites": 2,
+   "views": 153,
    "comments": null,
    "time_updated": 1792504781,
    "url": "https://steamcommunity.com/sharedfiles/filedetails/?id=3823470755"
@@ -14,9 +14,9 @@
   {
    "id": "3823299960",
    "title": "2x Trophy Bonuses",
-   "subscribers": 145,
+   "subscribers": 153,
    "favorites": 12,
-   "views": 480,
+   "views": 507,
    "comments": null,
    "time_updated": 1792472757,
    "url": "https://steamcommunity.com/sharedfiles/filedetails/?id=3823299960"
@@ -26,7 +26,7 @@
    "title": "Quick Mask Toggle (Remastered)",
    "subscribers": 13,
    "favorites": 7,
-   "views": 485,
+   "views": 489,
    "comments": null,
    "time_updated": 1792381153,
    "url": "https://steamcommunity.com/sharedfiles/filedetails/?id=3822703127"
@@ -37,61 +37,61 @@
    "title": "Patch 5.01 is live!",
    "date": 1791460971,
    "url": "https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1846018067929400",
-   "text": "Every step on the Path is an opportunity to improve for a witcher. See how we've improved The Witcher 3: Wild Hunt — Remastered with Patch 5.01, out now.GameplayFixed an issue where the \"Automatically Apply Blade Oils\" feature would work only if enabled during the current game session.Fixed an issue where, under specific circumstances, player-controlled boats could start moving uncontrollably and ignore terrain collisions.Improved ladder interaction animations.Fixed an issue where Geralt would collide with dead enemies after the Aard finisher.Fixed an issue where Vesemir would repeatedly say the same line if Quen was cast multiple times.Fixed an issue where dodging could have an unintentionally delayed response.Fixed an issue where it was possible to throw a bomb even if the option is disabled.Fixed an issue where the bonus granted by the Synergy skill displayed incorrect values.Added damage reflection to the Exploding Shield skill.Fixed an issue where Geralt's Stamina would be fully drained when sprinting and dodging at the same time.UIFixed an issue where the \"You've gained an ability point!\" pop-up could stay stuck on the screen.Fixed input hints flashing for a brief moment on the meditation screen.Fixed an issue where the Potions tutorial didn't appear after accessing the Consumables tab.Fixed some misaligned progress bars in the UI.PC-specificFixed an issue where the GTAO Quality setting would reset after restarting the game.Fixed an issue where Dynamic Resolution Scalin..."
+   "text": "Every step on the Path is an opportunity to improve for a witcher. See how we've improved The Witcher 3: Wild Hunt — Remastered with Patch 5.01, out now.GameplayFixed an issue where the \"Automatically Apply Blade Oils\" feature would work only if enabled during the current game session.Fixed an issue..."
   },
   {
    "title": "Hotfix 5.00c is out now!",
    "date": 1790864588,
    "url": "https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1845383656381526",
-   "text": "Hotfix 5.00c is now available for download for the Steam version of The Witcher 3: Wild Hunt — Remastered. You'll find the patch notes below:Fixed an issue where the game couldn't be saved or loaded if the path to the Documents folder contained special characters.Fixed an issue where voiceover audio could become significantly quieter than other in-game audio after navigating through the pause menu tabs.Made various visual adjustments in Velen, including tweaks to Bloom, vegetation lighting, saturation, and Path Tracing lighting.Reverted a change that caused significant performance and visual issues with HairWorks enabled for some users.Fixed an issue where marketing telemetry settings weren't saved properly.Fixed an issue where it wasn't possible to launch the Classic (1.32) version of the game.Once again, thank you for your patience as we continue investigating the issues you report."
+   "text": "Hotfix 5.00c is now available for download for the Steam version of The Witcher 3: Wild Hunt — Remastered. You'll find the patch notes below:Fixed an issue where the game couldn't be saved or loaded if the path to the Documents folder contained special characters.Fixed an issue where voiceover audio..."
   },
   {
    "title": "The Witcher 3: The Wild Hunt — Remastered is available now",
    "date": 1790676255,
    "url": "https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1844751498233758",
-   "text": "Perils, potions, monster contracts, and an elusive reunion… It’s time to return to the Continent and face the Wild Hunt once more. The Witcher 3: The Wild Hunt — Remastered is here! Join Geralt of Rivia on the Path in pursuit of Ciri, the Child of Prophecy and your adopted daughter... before the Wild Hunt reaches her. This free upgrade that brings countless improvements to visuals, performance, gameplay, and more!The Remastered update also includes the Hearts of Stone and Blood and Wine expansions, available now to all owners of the game.See you on the Continent."
+   "text": "Perils, potions, monster contracts, and an elusive reunion… It’s time to return to the Continent and face the Wild Hunt once more. The Witcher 3: The Wild Hunt — Remastered is here! Join Geralt of Rivia on the Path in pursuit of Ciri, the Child of Prophecy and your adopted daughter... before the Wil..."
   },
   {
    "title": "See what's new in The Witcher 3: Wild Hunt — Remastered!",
    "date": 1790607697,
    "url": "https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1844751498231727",
-   "text": "Prepare yourself before returning to the Path! The Witcher 3: Wild Hunt — Remastered releases tomorrow, September 29th. If you purchased any version of the game on Steam, you will be able to upgrade for free to the Remastered version as soon as it releases.While you wait, we've prepared a list of most important changes coming to The Witcher 3: Wild Hunt with the Remastered Upgrade. Please have a look below:Visual and RenderingImplemented an improved shading model.Updated multiple textures and models based on assets from The Witcher 3 HD Reworked Project.Improved lighting and shading for grass and foliage.Updated the visual effects of Signs, including their upgrade versions.Added new visual effects for skills.The game now features native DirectX 12 rendering with multithreading for better performance and visuals.Updated tone mapping for improved colors, lighting, contrast and detail.Added GTAO (Ground Truth Ambient Occlusion) as a new Screen Space Ambient Occlusion option.Updated the HDR calibration panel by adding new options and other improvements.Added Ray-Traced Local Shadows.Updated Screen Space Reflections.Updated Screen Space Shadows.Improved Motion Blur with a higher-quality, more cinematic look.Updated Subsurface Scattering for more natural skin rendering.Improved terrain and material rendering for more natural lighting, shadows, reflections, and highlights.Implemented new Image-Based Lighting (IBL) for improved ambient lighting and reflections across different enviro..."
+   "text": "Prepare yourself before returning to the Path! The Witcher 3: Wild Hunt — Remastered releases tomorrow, September 29th. If you purchased any version of the game on Steam, you will be able to upgrade for free to the Remastered version as soon as it releases.While you wait, we've prepared a list of mo..."
   },
   {
    "title": "A Look at The Witcher 3: Wild Hunt — Songs of the Past",
    "date": 1787689389,
    "url": "https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1841579228679567",
-   "text": "Sharpen your silver and steel. Geralt of Rivia returns to the Path alongside an old friend for a grand adventure in an idyllic new region.The Witcher 3: Wild Hunt — Songs of the Past brings the famed monster slayer to Letten, where he discovers a wealth of new quests, characters, and secrets to uncover. But the Path is never straightforward, and just below the surface lurks something sinister...Equip yourself for the next part of the journey, coming in 2027! Wishlist the expansion here:"
+   "text": "Sharpen your silver and steel. Geralt of Rivia returns to the Path alongside an old friend for a grand adventure in an idyllic new region.The Witcher 3: Wild Hunt — Songs of the Past brings the famed monster slayer to Letten, where he discovers a wealth of new quests, characters, and secrets to unco..."
   },
   {
    "title": "Announcing The Witcher 3: Wild Hunt – Remastered",
    "date": 1787688324,
    "url": "https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1841579228679517",
-   "text": "Are your swords oiled up and sharpened? Potions brewed? Roach saddled? It’s time to face Eredin and his entourage once again in The Witcher 3: Wild Hunt – Remastered! Coming September 29, 2026!This new version of the game features an array of improvements, bringing upgrades to visuals, gameplay, and more. It will be available as a free upgrade to all owners of the game on Steam.That’s not all, though! All current owners of the base game will gain access to the two original expansions – Hearts of Stone and Blood and Wine – for free! Both of these expansions will also be included in Remastered base game!Don’t have the game yet? Buy The Witcher 3: Wild Hunt now!"
+   "text": "Are your swords oiled up and sharpened? Potions brewed? Roach saddled? It’s time to face Eredin and his entourage once again in The Witcher 3: Wild Hunt – Remastered! Coming September 29, 2026!This new version of the game features an array of improvements, bringing upgrades to visuals, gameplay, and..."
   },
   {
    "title": "REDstreams is heading to gamescom 2026!",
    "date": 1787308289,
    "url": "https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1841579228668272",
-   "text": "5 years of REDstreams. 5 days of REDstreams at gamescom!Can't make it to Cologne? Worry not - we've got you covered. Starting Wednesday, August 26, join us LIVE every day from 10 AM to 7 PM CEST for game previews, special guests, interviews, behind-the-scenes stories, and much more!You can watch us here on Steam, on Twitch, or YouTube. Detailed schedules for each day will be posted on Day 1 of the event!See you at gamescom and in chat!"
+   "text": "5 years of REDstreams. 5 days of REDstreams at gamescom!Can't make it to Cologne? Worry not - we've got you covered. Starting Wednesday, August 26, join us LIVE every day from 10 AM to 7 PM CEST for game previews, special guests, interviews, behind-the-scenes stories, and much more!You can watch us ..."
   },
   {
    "title": "REDstreams — The Witcher 3: Blood and Wine 10th Anniversary Stream is coming!",
    "date": 1779971382,
    "url": "https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1833968530888000",
-   "text": "Toussaint, the land of love and wine 🍷Join us on May 28th at 5 PM CEST for a special anniversary stream of The Witcher 3: Blood and Wine. Our hosts, Amelia Korzycka and Laura Beitzel, together with their guests Kacper Niepokólczycki and Magdalena Zych, will return once more to the land of knights, vineyards, and vampires!See you soon in Toussaint and in the chat!"
+   "text": "Toussaint, the land of love and wine 🍷Join us on May 28th at 5 PM CEST for a special anniversary stream of The Witcher 3: Blood and Wine. Our hosts, Amelia Korzycka and Laura Beitzel, together with their guests Kacper Niepokólczycki and Magdalena Zych, will return once more to the land of knights, v..."
   },
   {
    "title": "Announcing The Witcher 3: Wild Hunt - Songs of the Past",
    "date": 1779872410,
    "url": "https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1833968530884823",
-   "text": "Medallion's humming... that can only mean one thing! It's time to announce we're working on a brand new expansion for The Witcher 3: Wild Hunt! Get ready to return to the Path with Geralt of Rivia in The Witcher 3: Wild Hunt - Songs of the Past, coming in 2027. We’re currently co-developing the expansion with Fool’s Theory and we’ll share more in late summer, so stay tuned! With new content coming to the game, we also need to update our system requirements to ensure smooth performance and compatibility going forward for The Witcher 3: Wild Hunt and Songs of the Past. These requirements will become effective starting from the next update. You can find more about them here: https://thewitcher.ly/NewRequirements"
+   "text": "Medallion's humming... that can only mean one thing! It's time to announce we're working on a brand new expansion for The Witcher 3: Wild Hunt! Get ready to return to the Path with Geralt of Rivia in The Witcher 3: Wild Hunt - Songs of the Past, coming in 2027. We’re currently co-developing the expa..."
   },
   {
    "title": "Reigns: The Witcher Available Now",
    "date": 1772038911,
    "url": "https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1825727806705351",
-   "text": "The Witcher himself has arrived in the Reigns universe!In Reigns: The Witcher, Geralt forges his own path… through several tries. In this card decision-making game from Nerial and Devolver Digital, you swipe your way to triumph to keep the story going. Explore the world through Dandelion’s ballads, make your choices, and create your epic path!Check out the trailer below, and start crafting your legendary story:See you on the Continent!"
+   "text": "The Witcher himself has arrived in the Reigns universe!In Reigns: The Witcher, Geralt forges his own path… through several tries. In this card decision-making game from Nerial and Devolver Digital, you swipe your way to triumph to keep the story going. Explore the world through Dandelion’s ballads, ..."
   }
  ]
 }
