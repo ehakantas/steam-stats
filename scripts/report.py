@@ -29,7 +29,9 @@ C = {c["id"]: c for c in cur}
 # Missing or unreadable file -> everything below behaves exactly as before.
 try:
     comments = json.load(open(os.path.join(here, "..", "data", "comments.json"))).get("items", {})
-except (OSError, ValueError):
+    if not isinstance(comments, dict):
+        comments = {}
+except (OSError, ValueError, AttributeError):
     comments = {}
 
 
