@@ -36,7 +36,6 @@ items = [{
     "url": f"https://steamcommunity.com/sharedfiles/filedetails/?id={d['publishedfileid']}",
 } for d in details]
 
-#news = get("ISteamNews/GetNewsForApp/v2/", {"appid": APPID, "count": 10, "maxlength": 300}).get("appnews", {}).get("newsitems", [])
 news = get("ISteamNews/GetNewsForApp/v2/", {"appid": APPID, "count": 10, "maxlength": 300, "feeds": "steam_community_announcements"}).get("appnews", {}).get("newsitems", [])
 news = [{"title": n["title"], "date": n["date"], "url": n["url"], "text": n["contents"]} for n in news]
 
