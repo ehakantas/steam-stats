@@ -1,7 +1,7 @@
 name: steam-stats
 on:
   schedule:
-    - cron: "0 9,21 * * *"
+    - cron: "0 9,21 * * *"  # GitHub cron is always UTC: 12:00 and 00:00 TR
   workflow_dispatch:
 permissions:
   contents: write
