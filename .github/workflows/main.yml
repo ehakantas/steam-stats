@@ -13,6 +13,7 @@ jobs:
       - run: python3 scripts/fetch_stats.py
         env:
           STEAM_API_KEY: ${{ secrets.STEAM_API_KEY }}
+          STEAM_VANITY: ${{ secrets.STEAM_VANITY }}
       - run: |
           git config user.name "stats-bot"
           git config user.email "stats-bot@users.noreply.github.com"
