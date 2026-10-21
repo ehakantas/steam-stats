@@ -240,7 +240,16 @@ def main():
     out_path = sys.argv[2] if len(sys.argv) > 2 else os.path.join(here, "..", "data", "comments.json")
 
     stats = json.load(open(stats_path))
-    previous = json.load(open(out_path)) if os.path.exists(out_path) else {}
+    # Boş/bozuk dosya (ör. elle temizlenmiş) ilk çalıştırma gibi ele alınır.
+    try:
+        previous = json.load(open(out_path))
+        if not isinstance(previous, dict):
+            raise ValueError("beklenen JSON nesnesi değil")
+    except FileNotFoundError:
+        previous = {}
+    except ValueError as e:
+        print(f"UYARI: {out_path} okunamadı ({e}); sıfırdan başlanıyor", file=sys.stderr)
+        previous = {}
     result = run(stats, previous)
 
     os.makedirs(os.path.dirname(os.path.abspath(out_path)), exist_ok=True)
