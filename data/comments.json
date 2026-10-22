@@ -1,5 +1,5 @@
 {
- "generated_at": 1792678884,
+ "generated_at": 1792681744,
  "items": {
   "3823470755": {
    "title": "Floating Damage Numbers [Remastered]",
@@ -18,10 +18,8 @@
   "3823299960": {
    "title": "2x Trophy Bonuses",
    "total": 1,
-   "new_since_last": 1,
-   "new_keywords": {
-    "update": 1
-   },
+   "new_since_last": 0,
+   "new_keywords": {},
    "keywords_total": {
     "update": 1
    },
