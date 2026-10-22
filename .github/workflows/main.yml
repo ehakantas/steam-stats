@@ -40,7 +40,7 @@ jobs:
             exit 0
           fi
           code=$(curl -sS -o /dev/null -w '%{http_code}' --max-time 30 -X POST \
-            https://api.anthropic.com/v1/claude_code/routines/trig_01M2mB2mwhF7GVsn6p7hZpJV/fire \
+            https://api.anthropic.com/v1/claude_code/routines/trig_01PFu9axiWE5vbKp2GxcxzcU/fire \
             -H "Authorization: Bearer $CLAUDE_ROUTINE_TOKEN" \
             -H "anthropic-beta: experimental-cc-routine-2026-04-01" \
             -H "anthropic-version: 2023-06-01" \
