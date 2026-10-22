@@ -9,8 +9,10 @@ Prints a short summary for the task's reply. All printed dates/times are Istanbu
 
 Comments: data/comments.json (fetch_comments.py) is refreshed on every workflow run, so its
 "new_since_last" only covers the last workflow run. This script instead diffs the cumulative
-counters (total, keywords_total) against the values stored in the dashboard state at the
-previous report, so every comment since the last report is counted exactly once.
+counters (seen_count, keywords_total) against the values stored in the dashboard state at the
+previous report, so every comment since the last report is counted exactly once. seen_count only
+grows, so a deleted comment cannot hide a new one; "total" (Steam's current count) is used as a
+fallback until both sides have a seen_count.
 """
 import datetime, json, os, sys, time, zoneinfo
 
@@ -78,7 +80,10 @@ for c in cur:
     p = (prev_lc or {}).get(c["id"])
     if p is None or c["id"] in cerrors:
         continue  # no baseline yet (or unreadable now): nothing counted as new
-    t0, t1 = p.get("total"), v.get("total")
+    if isinstance(p.get("seen"), int) and isinstance(v.get("seen_count"), int):
+        t0, t1 = p["seen"], v["seen_count"]
+    else:
+        t0, t1 = p.get("total"), v.get("total")
     new = max(0, t1 - t0) if isinstance(t0, int) and isinstance(t1, int) else 0
     kw0, kw1 = p.get("kw") or {}, v.get("keywords_total") or {}
     kw = {k: kw1[k] - kw0.get(k, 0) for k in kw1 if kw1[k] - kw0.get(k, 0) > 0}
@@ -101,7 +106,8 @@ def comment_ctx(item_id):
 last_comments = dict(prev_lc or {})
 for cid, v in citems.items():
     if isinstance(v, dict) and cid not in cerrors:
-        last_comments[cid] = {"total": v.get("total"), "kw": v.get("keywords_total") or {}}
+        last_comments[cid] = {"total": v.get("total"), "seen": v.get("seen_count"),
+                              "kw": v.get("keywords_total") or {}}
 
 # ------------------------------------------------------------------ alerts
 alerts = [f"🟠 REMOVED/HIDDEN: {p['title']} ({p['id']}) missing vs run {L}; likely hidden/removed on Workshop; check the item page."

@@ -1,15 +1,15 @@
-"""Workshop yorum istatistikleri.
+"""Workshop comment statistics.
 
-Her mod için Steam'in yorum sayfasını (JSON + HTML parçası) okur, yalnızca
-YENİ yorumları sayar ve data/comments.json içine toplu istatistik yazar.
+For each mod, reads Steam's comment endpoint (JSON + HTML fragment), counts only
+NEW comments and writes aggregate statistics to data/comments.json.
 
-Gizlilik: repo herkese açık olduğundan yorum metni ve yazar adı SAKLANMAZ.
-Yinelenenleri ayıklamak için yorumların kısaltılmış hash'i tutulur.
+Privacy: the repo is public, so comment text and author names are NOT stored.
+A shortened hash of each comment is kept to skip duplicates.
 
-Yalnızca standart kütüphane kullanır (workflow'da pip install gerekmez).
+Uses only the standard library (no pip install needed in the workflow).
 
-kullanım: python3 scripts/fetch_comments.py [stats.json] [comments.json]
-Hata toleranslıdır: bir mod başarısız olursa diğerleri işlenir, çıktı yine yazılır.
+usage: python3 scripts/fetch_comments.py [stats.json] [comments.json]
+Fault tolerant: if one mod fails the others are still processed and the output is still written.
 """
 import hashlib
 import json
@@ -29,15 +29,15 @@ RENDER = "https://steamcommunity.com/comment/PublishedFile_Public/render/{owner}
 ITEM_PAGE = "https://steamcommunity.com/sharedfiles/filedetails/?id={id}"
 USER_AGENT = "steam-stats-comments/1.0"
 
-PAGE_SIZE = 50        # istenen sayfa boyutu; Steam farklı dönerse dönen değer kullanılır
-MAX_PAGES = 30        # ilk çalıştırmada üst sınır (30 x 50 = 1500 yorum)
-SLEEP_SECONDS = 1.0   # istekler arası bekleme
-SEEN_LIMIT = 5000     # mod başına saklanan hash sayısı üst sınırı
+PAGE_SIZE = 50        # requested page size; if Steam returns a different one, that is used
+MAX_PAGES = 30        # upper bound on the first run (30 x 50 = 1500 comments)
+SLEEP_SECONDS = 1.0   # delay between requests
+SEEN_LIMIT = 5000     # max number of hashes stored per mod
 
-# Anahtar kelimeler (küçük harfe çevrilmiş metinde, kelime BAŞINDAN eşleşir:
-# "bug" -> "bug", "bugs", "buggy" eşleşir; "debug" eşleşmez. "crash" -> "crashes", "crashing").
-# COMPLAINT_KEYWORDS günlük raporda uyarı üretir; INFO_KEYWORDS yalnızca bilgi olarak sayılır
-# (bunlar "update için teşekkürler" gibi olumlu yorumlarda da geçer).
+# Keywords (matched at the START of a word in lower-cased text:
+# "bug" matches "bug", "bugs", "buggy" but not "debug"; "crash" matches "crashes", "crashing").
+# COMPLAINT_KEYWORDS raise alerts in the daily report; INFO_KEYWORDS are only counted for info
+# (they also appear in positive comments such as "thanks for the update").
 COMPLAINT_KEYWORDS = [
     "crash", "broken", "bug", "not working", "doesn't work", "doesnt work",
     "error", "freeze", "stuck",
@@ -52,17 +52,17 @@ TR = ZoneInfo("Europe/Istanbul")
 
 
 # --------------------------------------------------------------------------
-# HTML ayrıştırma (stdlib)
+# HTML parsing (stdlib)
 # --------------------------------------------------------------------------
 class _CommentParser(HTMLParser):
-    """Steam yorum HTML'inden (id, zaman damgası, metin) üçlülerini çıkarır."""
+    """Extracts (id, timestamp, text) triples from Steam comment HTML."""
 
     def __init__(self):
         super().__init__(convert_charrefs=True)
         self.comments = []
         self._cur = None
-        self._depth = 0          # yorum bloğunun içindeki div derinliği
-        self._text_depth = None  # metin bloğunun derinliği
+        self._depth = 0          # div depth inside the comment block
+        self._text_depth = None  # depth of the text block
         self._text_parts = []
 
     @staticmethod
@@ -104,13 +104,13 @@ class _CommentParser(HTMLParser):
 
 
 def parse_comments(html):
-    """HTML parçasından [{'key', 'ts', 'text'}] listesi döner (en yeni önce)."""
+    """Returns a [{'key', 'ts', 'text'}] list from the HTML fragment (newest first)."""
     p = _CommentParser()
     p.feed(html or "")
     p.close()
     out = []
     for c in p.comments:
-        # Kararlı anahtar: öğe id'si varsa o, yoksa zaman damgası + metin özeti.
+        # Stable key: the element id if present, otherwise timestamp + text.
         basis = c["id"] or f"{c['ts']}|{c['text']}"
         key = hashlib.sha1(basis.encode("utf-8")).hexdigest()[:16]
         out.append({"key": key, "ts": c["ts"], "text": c["text"]})
@@ -118,7 +118,7 @@ def parse_comments(html):
 
 
 # --------------------------------------------------------------------------
-# Ağ katmanı
+# Network layer
 # --------------------------------------------------------------------------
 def http_get(url, params=None, retries=2):
     if params:
@@ -132,14 +132,14 @@ def http_get(url, params=None, retries=2):
         except (urllib.error.URLError, TimeoutError) as e:
             last = e
             time.sleep(2 * (attempt + 1))
-    raise RuntimeError(f"istek başarısız: {url} ({last})")
+    raise RuntimeError(f"request failed: {url} ({last})")
 
 
 def find_owner(item, get=http_get):
-    """Yorum endpoint'i için sahip steamid'si.
+    """Owner steamid for the comment endpoint.
 
-    Önce stats.json'daki 'creator' alanı; yoksa mod sayfasındaki yorum
-    kurulum kodundan okunur (yedek yol).
+    Uses the 'creator' field from stats.json first; otherwise it is read from
+    the comment setup code on the mod page (fallback).
     """
     if item.get("creator"):
         return str(item["creator"])
@@ -148,12 +148,12 @@ def find_owner(item, get=http_get):
     if not m:
         m = re.search(r'"owner"\s*:\s*"(\d+)"', page)
     if not m:
-        raise RuntimeError("yorum sahibi (owner) bulunamadı")
+        raise RuntimeError("comment owner not found")
     return m.group(1)
 
 
 def _int(v, default=None):
-    """Steam bazı sayıları metin olarak döndürür ("50"); sayıya çevirir."""
+    """Steam returns some numbers as strings ("50"); converts them to int."""
     try:
         return int(v)
     except (TypeError, ValueError):
@@ -161,27 +161,31 @@ def _int(v, default=None):
 
 
 def fetch_item_comments(item, known, get=http_get, sleep=time.sleep):
-    """Bir modun yeni yorumlarını döner: (yeni_yorumlar, toplam_sayı).
+    """Returns a mod's new comments: (new_comments, total_count).
 
-    Yorumlar en yeniden eskiye gelir. Tamamı bilinen ilk sayfada durulur.
+    Comments arrive newest first. Stops at the first page that is fully known.
     """
     owner = find_owner(item, get)
     url = RENDER.format(owner=owner, feature=item["id"])
-    known = set(known)
+    known, this_run = set(known), set()
     fresh, total, start = [], None, 0
 
     for _ in range(MAX_PAGES):
         data = json.loads(get(url, {"start": start, "count": PAGE_SIZE}))
         if not data.get("success", True):
-            raise RuntimeError("Steam success=false döndü")
+            raise RuntimeError("Steam returned success=false")
         total = _int(data.get("total_count"), total)
         page = parse_comments(data.get("comments_html", ""))
         if not page:
             break
-        new_here = [c for c in page if c["key"] not in known]
+        # A comment posted mid-scan shifts page boundaries, so a page can repeat the previous
+        # page's tail. Those repeats are skipped via this_run but must not stop the scan:
+        # only comments known from earlier runs mean we have caught up.
+        new_here = [c for c in page if c["key"] not in known and c["key"] not in this_run]
+        this_run.update(c["key"] for c in new_here)
         fresh.extend(new_here)
-        if len(new_here) < len(page):
-            break  # bilinen yorumlara ulaştık
+        if any(c["key"] in known for c in page):
+            break  # reached comments known from earlier runs
         step = _int(data.get("pagesize")) or len(page)
         start += step
         if total is not None and start >= total:
@@ -191,13 +195,13 @@ def fetch_item_comments(item, known, get=http_get, sleep=time.sleep):
 
 
 # --------------------------------------------------------------------------
-# İstatistik
+# Statistics
 # --------------------------------------------------------------------------
 def keyword_counts(comments):
-    """Her anahtar kelimeyi kaç yorumun içerdiğini sayar."""
+    """Counts how many comments contain each keyword."""
     c = Counter()
     for cm in comments:
-        t = cm["text"].lower().replace("’", "'")  # kıvrık kesme işareti: doesn’t -> doesn't
+        t = cm["text"].lower().replace("’", "'")  # curly apostrophe: doesn’t -> doesn't
         for kw, rx in _KW_RE.items():
             if rx.search(t):
                 c[kw] += 1
@@ -205,7 +209,7 @@ def keyword_counts(comments):
 
 
 def day_counts(comments):
-    """Yorumları İstanbul (TR) takvim gününe göre sayar."""
+    """Counts comments per Istanbul (TR) calendar day."""
     c = Counter()
     for cm in comments:
         if cm["ts"]:
@@ -220,7 +224,7 @@ def merge_counts(old, new):
 
 
 def update_item(prev, item, fresh, total):
-    """Önceki durum + yeni yorumlar -> yeni durum (yorum metni saklanmaz)."""
+    """Previous state + new comments -> new state (comment text is not stored)."""
     prev = prev or {}
     seen = (prev.get("seen") or []) + [c["key"] for c in fresh]
     ts = [c["ts"] for c in fresh if c["ts"]]
@@ -228,6 +232,9 @@ def update_item(prev, item, fresh, total):
         "title": item.get("title"),
         "total": total if total is not None else prev.get("total"),
         "new_since_last": len(fresh),
+        # Cumulative count of comments ever seen; unlike "total" it never drops when a
+        # comment is deleted, so report.py can diff it without deletions hiding new ones.
+        "seen_count": (prev.get("seen_count") or 0) + len(fresh),
         "new_keywords": keyword_counts(fresh),
         "keywords_total": merge_counts(prev.get("keywords_total"), keyword_counts(fresh)),
         "daily": merge_counts(prev.get("daily"), day_counts(fresh)),
@@ -246,7 +253,7 @@ def run(stats, previous, get=http_get, sleep=time.sleep, now=time.time):
             fresh, total = fetch_item_comments(
                 item, (prev or {}).get("seen", []), get=get, sleep=sleep)
             items[pid] = update_item(prev, item, fresh, total)
-        except Exception as e:  # tek mod hatası diğerlerini durdurmasın
+        except Exception as e:  # one failing mod must not stop the others
             errors.append({"id": pid, "error": str(e)})
             if prev:
                 items[pid] = {**prev, "new_since_last": 0, "new_keywords": {}}
@@ -260,15 +267,15 @@ def main():
     out_path = sys.argv[2] if len(sys.argv) > 2 else os.path.join(here, "..", "data", "comments.json")
 
     stats = json.load(open(stats_path))
-    # Boş/bozuk dosya (ör. elle temizlenmiş) ilk çalıştırma gibi ele alınır.
+    # An empty/corrupt file (e.g. cleared by hand) is treated like a first run.
     try:
         previous = json.load(open(out_path))
         if not isinstance(previous, dict):
-            raise ValueError("beklenen JSON nesnesi değil")
+            raise ValueError("expected a JSON object")
     except FileNotFoundError:
         previous = {}
     except ValueError as e:
-        print(f"UYARI: {out_path} okunamadı ({e}); sıfırdan başlanıyor", file=sys.stderr)
+        print(f"WARNING: could not read {out_path} ({e}); starting from scratch", file=sys.stderr)
         previous = {}
     result = run(stats, previous)
 
@@ -276,9 +283,9 @@ def main():
     json.dump(result, open(out_path, "w"), ensure_ascii=False, indent=1)
 
     new = sum(i["new_since_last"] for i in result["items"].values())
-    print(f"comments: {len(result['items'])} mod, {new} yeni yorum, {len(result['errors'])} hata")
+    print(f"comments: {len(result['items'])} mods, {new} new comments, {len(result['errors'])} errors")
     for e in result["errors"]:
-        print(f"  HATA {e['id']}: {e['error']}", file=sys.stderr)
+        print(f"  ERROR {e['id']}: {e['error']}", file=sys.stderr)
 
 
 if __name__ == "__main__":
