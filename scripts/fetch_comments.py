@@ -41,6 +41,9 @@ SEEN_LIMIT = 5000     # mod başına saklanan hash sayısı üst sınırı
 COMPLAINT_KEYWORDS = [
     "crash", "broken", "bug", "not working", "doesn't work", "doesnt work",
     "error", "freeze", "stuck",
+    "isn't working", "isnt working", "does not work", "do not work", "don't work",
+    "dont work", "won't work", "wont work", "stopped working", "no longer work",
+    "not loading", "won't load",
 ]
 INFO_KEYWORDS = ["patch", "update", "fix"]
 KEYWORDS = COMPLAINT_KEYWORDS + INFO_KEYWORDS
