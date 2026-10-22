@@ -1,10 +1,11 @@
 {
- "generated_at": 1792683014,
+ "generated_at": 1792685560,
  "items": {
   "3823470755": {
    "title": "Floating Damage Numbers [Remastered]",
    "total": 1,
    "new_since_last": 0,
+   "seen_count": 0,
    "new_keywords": {},
    "keywords_total": {},
    "daily": {
@@ -19,6 +20,7 @@
    "title": "2x Trophy Bonuses",
    "total": 1,
    "new_since_last": 0,
+   "seen_count": 0,
    "new_keywords": {},
    "keywords_total": {
     "update": 1
@@ -35,6 +37,7 @@
    "title": "Quick Mask Toggle (Remastered)",
    "total": 0,
    "new_since_last": 0,
+   "seen_count": 0,
    "new_keywords": {},
    "keywords_total": {},
    "daily": {},
