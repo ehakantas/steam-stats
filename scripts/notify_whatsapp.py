@@ -1,6 +1,6 @@
 """Send a short stats summary to WhatsApp via CallMeBot (best effort, personal notification).
 
-Needs CALLMEBOT_PHONE and CALLMEBOT_APIKEY in the environment; exits quietly when they are
+Needs CALLMEBOT_PHONE and CALLMEBOT_APIKEY in the environment (DASHBOARD_URL is optional); exits quietly when they are
 missing. Never prints the URL, phone, key or response body: only the HTTP status.
 Run before the commit step so the previous stats are still HEAD:data/stats.json.
 """
@@ -41,10 +41,13 @@ for i in stats["items"][:8]:
     tot["subscribers"] += i["subscribers"]
     tot["views"] += i["views"]
 
+dashboard = os.environ.get("DASHBOARD_URL", "").strip()
+
 now = datetime.datetime.now(zoneinfo.ZoneInfo("Europe/Istanbul")).strftime("%d.%m %H:%M")
 text = "\n".join([f"Steam stats {now}", *lines,
                   f"Toplam: {tot['subscribers']} abone, {tot['views']} görüntülenme",
-                  f"Yeni yorum: {new_comments}"])
+                  f"Yeni yorum: {new_comments}",
+                  *([f"Dashboard: {dashboard}"] if dashboard else [])])
 
 url = ("https://api.callmebot.com/whatsapp.php?"
        + urllib.parse.urlencode({"phone": phone, "text": text, "apikey": apikey}, quote_via=urllib.parse.quote))
