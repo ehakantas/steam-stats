@@ -1,5 +1,5 @@
 {
- "generated_at": 1792633898,
+ "generated_at": 1792657188,
  "items": {
   "3823470755": {
    "title": "Floating Damage Numbers [Remastered]",
@@ -32,5 +32,10 @@
    "seen": []
   }
  },
- "errors": []
+ "errors": [
+  {
+   "id": "3823470755",
+   "error": "unsupported operand type(s) for +=: 'int' and 'str'"
+  }
+ ]
 }
