@@ -149,6 +149,14 @@ def find_owner(item, get=http_get):
     return m.group(1)
 
 
+def _int(v, default=None):
+    """Steam bazı sayıları metin olarak döndürür ("50"); sayıya çevirir."""
+    try:
+        return int(v)
+    except (TypeError, ValueError):
+        return default
+
+
 def fetch_item_comments(item, known, get=http_get, sleep=time.sleep):
     """Bir modun yeni yorumlarını döner: (yeni_yorumlar, toplam_sayı).
 
@@ -163,7 +171,7 @@ def fetch_item_comments(item, known, get=http_get, sleep=time.sleep):
         data = json.loads(get(url, {"start": start, "count": PAGE_SIZE}))
         if not data.get("success", True):
             raise RuntimeError("Steam success=false döndü")
-        total = data.get("total_count", total)
+        total = _int(data.get("total_count"), total)
         page = parse_comments(data.get("comments_html", ""))
         if not page:
             break
@@ -171,7 +179,7 @@ def fetch_item_comments(item, known, get=http_get, sleep=time.sleep):
         fresh.extend(new_here)
         if len(new_here) < len(page):
             break  # bilinen yorumlara ulaştık
-        step = data.get("pagesize") or len(page)
+        step = _int(data.get("pagesize")) or len(page)
         start += step
         if total is not None and start >= total:
             break
