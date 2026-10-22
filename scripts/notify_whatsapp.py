@@ -34,18 +34,22 @@ def delta(cur, old):
 
 lines = []
 tot = {"subscribers": 0, "views": 0}
+new_tot = {"subscribers": 0, "views": 0}
 for i in stats["items"][:8]:
     old = P.get(i["id"], {})
-    lines.append(f"*{i['title']}*: {i['subscribers']}{delta(i['subscribers'], old.get('subscribers'))} abone, "
+    lines.append(f"{i['title']}: {i['subscribers']}{delta(i['subscribers'], old.get('subscribers'))} abone, "
                  f"{i['views']}{delta(i['views'], old.get('views'))} görüntülenme")
-    tot["subscribers"] += i["subscribers"]
-    tot["views"] += i["views"]
+    for k in tot:
+        tot[k] += i[k]
+        if old.get(k) is not None:
+            new_tot[k] += i[k] - old[k]
 
 dashboard = os.environ.get("DASHBOARD_URL", "").strip()
-
 now = datetime.datetime.now(zoneinfo.ZoneInfo("Europe/Istanbul")).strftime("%d.%m %H:%M")
 text = "\n".join([f"Steam stats {now}", *lines,
                   f"Toplam: {tot['subscribers']} abone, {tot['views']} görüntülenme",
+                  f"Yeni Görüntülenme: {new_tot['views']}",
+                  f"Yeni abone: {new_tot['subscribers']}",
                   f"Yeni yorum: {new_comments}",
                   *([f"Dashboard: {dashboard}"] if dashboard else [])])
 
