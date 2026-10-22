@@ -29,17 +29,20 @@ new_comments = sum(c.get("new_since_last") or 0 for c in comments.values())
 
 
 def delta(cur, old):
-    return f" ({cur - old:+d})" if old is not None and cur != old else ""
+    return f" ({cur - old:+d})" if cur is not None and old is not None and cur != old else ""
 
 
 lines = []
 tot = {"subscribers": 0, "views": 0}
 new_tot = {"subscribers": 0, "views": 0}
-for i in stats["items"][:8]:
+for n, i in enumerate(stats["items"]):
     old = P.get(i["id"], {})
-    lines.append(f"{i['title']}: {i['subscribers']}{delta(i['subscribers'], old.get('subscribers'))} abone, "
-                 f"{i['views']}{delta(i['views'], old.get('views'))} görüntülenme")
+    if n < 8:  # keep the message short; totals below still cover every mod
+        lines.append(f"{i['title']}: {i['subscribers']}{delta(i['subscribers'], old.get('subscribers'))} abone, "
+                     f"{i['views']}{delta(i['views'], old.get('views'))} görüntülenme")
     for k in tot:
+        if i.get(k) is None:  # Steam occasionally omits a counter; skip it instead of crashing
+            continue
         tot[k] += i[k]
         if old.get(k) is not None:
             new_tot[k] += i[k] - old[k]
