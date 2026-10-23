@@ -1,7 +1,7 @@
 name: steam-stats
 on:
   schedule:
-    - cron: "0 6 * * *"  # GitHub cron is always UTC: 06:00 UTC = 09:00 TR (Istanbul, UTC+3)
+    - cron: "23 5 * * *"  # GitHub cron is always UTC: 05:23 UTC = 08:23 TR (Istanbul, UTC+3); off-the-hour minute to avoid GitHub's top-of-hour delays
   workflow_dispatch:
 permissions:
   contents: write
