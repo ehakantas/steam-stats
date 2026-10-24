@@ -2,9 +2,11 @@
 
 Needs CALLMEBOT_PHONE and CALLMEBOT_APIKEY in the environment (DASHBOARD_URL is optional); exits quietly when they are
 missing. Never prints the URL, phone, key or response body: only the HTTP status.
-Run before the commit step so the previous stats are still HEAD:data/stats.json.
+The changes since the previous run come from the "delta" fields that fetch_stats.py writes.
 """
-import datetime, json, os, subprocess, sys, urllib.parse, urllib.request, zoneinfo
+import datetime, json, os, sys, urllib.parse, urllib.request
+
+from config import TR
 
 here = os.path.dirname(os.path.abspath(__file__))
 phone = os.environ.get("CALLMEBOT_PHONE", "").strip()
@@ -14,12 +16,6 @@ if not phone or not apikey:
     sys.exit(0)
 
 stats = json.load(open(os.path.join(here, "..", "data", "stats.json")))
-try:
-    prev = json.loads(subprocess.check_output(
-        ["git", "show", "HEAD:data/stats.json"], stderr=subprocess.DEVNULL))
-except Exception:
-    prev = {}
-P = {i["id"]: i for i in prev.get("items", [])}
 
 try:
     comments = json.load(open(os.path.join(here, "..", "data", "comments.json")))["items"]
@@ -28,27 +24,26 @@ except Exception:
 new_comments = sum(c.get("new_since_last") or 0 for c in comments.values())
 
 
-def delta(cur, old):
-    return f" ({cur - old:+d})" if cur is not None and old is not None and cur != old else ""
+def delta(d):
+    return f" ({d:+d})" if d else ""
 
 
 lines = []
 tot = {"subscribers": 0, "views": 0}
 new_tot = {"subscribers": 0, "views": 0}
 for n, i in enumerate(stats["items"]):
-    old = P.get(i["id"], {})
+    d = i.get("delta") or {}
     if n < 8:  # keep the message short; totals below still cover every mod
-        lines.append(f"{i['title']}: {i['subscribers']}{delta(i['subscribers'], old.get('subscribers'))} abone, "
-                     f"{i['views']}{delta(i['views'], old.get('views'))} görüntülenme")
+        lines.append(f"{i['title']}: {i['subscribers']}{delta(d.get('subscribers'))} abone, "
+                     f"{i['views']}{delta(d.get('views'))} görüntülenme")
     for k in tot:
         if i.get(k) is None:  # Steam occasionally omits a counter; skip it instead of crashing
             continue
         tot[k] += i[k]
-        if old.get(k) is not None:
-            new_tot[k] += i[k] - old[k]
+        new_tot[k] += d.get(k) or 0
 
 dashboard = os.environ.get("DASHBOARD_URL", "").strip()
-now = datetime.datetime.now(zoneinfo.ZoneInfo("Europe/Istanbul")).strftime("%d.%m %H:%M")
+now = datetime.datetime.now(TR).strftime("%d.%m %H:%M")
 text = "\n".join([f"Steam stats {now}", *lines,
                   f"Toplam: {tot['subscribers']} abone, {tot['views']} görüntülenme",
                   f"Yeni Görüntülenme: {new_tot['views']}",

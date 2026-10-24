@@ -17,38 +17,23 @@ import os
 import re
 import sys
 import time
-import urllib.error
-import urllib.parse
-import urllib.request
 from collections import Counter
 from datetime import datetime
-from zoneinfo import ZoneInfo
 from html.parser import HTMLParser
+
+from common import http_get
+from config import COMPLAINT_KEYWORDS, INFO_KEYWORDS, TR
 
 RENDER = "https://steamcommunity.com/comment/PublishedFile_Public/render/{owner}/{feature}/"
 ITEM_PAGE = "https://steamcommunity.com/sharedfiles/filedetails/?id={id}"
-USER_AGENT = "steam-stats-comments/1.0"
 
 PAGE_SIZE = 50        # requested page size; if Steam returns a different one, that is used
 MAX_PAGES = 30        # upper bound on the first run (30 x 50 = 1500 comments)
 SLEEP_SECONDS = 1.0   # delay between requests
 SEEN_LIMIT = 5000     # max number of hashes stored per mod
 
-# Keywords (matched at the START of a word in lower-cased text:
-# "bug" matches "bug", "bugs", "buggy" but not "debug"; "crash" matches "crashes", "crashing").
-# COMPLAINT_KEYWORDS raise alerts in the daily report; INFO_KEYWORDS are only counted for info
-# (they also appear in positive comments such as "thanks for the update").
-COMPLAINT_KEYWORDS = [
-    "crash", "broken", "bug", "not working", "doesn't work", "doesnt work",
-    "error", "freeze", "stuck",
-    "isn't working", "isnt working", "does not work", "do not work", "don't work",
-    "dont work", "won't work", "wont work", "stopped working", "no longer work",
-    "not loading", "won't load",
-]
-INFO_KEYWORDS = ["patch", "update", "fix"]
 KEYWORDS = COMPLAINT_KEYWORDS + INFO_KEYWORDS
 _KW_RE = {kw: re.compile(r"\b" + re.escape(kw)) for kw in KEYWORDS}
-TR = ZoneInfo("Europe/Istanbul")
 
 
 # --------------------------------------------------------------------------
@@ -118,23 +103,8 @@ def parse_comments(html):
 
 
 # --------------------------------------------------------------------------
-# Network layer
+# Network layer (http_get lives in common.py)
 # --------------------------------------------------------------------------
-def http_get(url, params=None, retries=2):
-    if params:
-        url = f"{url}?{urllib.parse.urlencode(params)}"
-    last = None
-    for attempt in range(retries + 1):
-        try:
-            req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
-            with urllib.request.urlopen(req, timeout=30) as r:
-                return r.read().decode("utf-8", "replace")
-        except (urllib.error.URLError, TimeoutError) as e:
-            last = e
-            time.sleep(2 * (attempt + 1))
-    raise RuntimeError(f"request failed: {url} ({last})")
-
-
 def find_owner(item, get=http_get):
     """Owner steamid for the comment endpoint.
 

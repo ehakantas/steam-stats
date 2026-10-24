@@ -27,24 +27,11 @@ jobs:
       - run: |
           git config user.name "stats-bot"
           git config user.email "stats-bot@users.noreply.github.com"
-          git add data/stats.json
+          git add data/stats.json data/history.csv
           git add data/comments.json 2>/dev/null || true
           git diff --cached --quiet || (git commit -m "update stats" && git push)
       - name: Trigger Witcher 3 Workshop report (best effort; must never fail the run)
         continue-on-error: true
         env:
           CLAUDE_ROUTINE_TOKEN: ${{ secrets.CLAUDE_ROUTINE_TOKEN }}
-        run: |
-          if [ -z "$CLAUDE_ROUTINE_TOKEN" ]; then
-            echo "CLAUDE_ROUTINE_TOKEN not set; skipping"
-            exit 0
-          fi
-          code=$(curl -sS -o /dev/null -w '%{http_code}' --max-time 30 -X POST \
-            https://api.anthropic.com/v1/claude_code/routines/trig_01PFu9axiWE5vbKp2GxcxzcU/fire \
-            -H "Authorization: Bearer $CLAUDE_ROUTINE_TOKEN" \
-            -H "anthropic-beta: experimental-cc-routine-2026-04-01" \
-            -H "anthropic-version: 2023-06-01" \
-            -H "Content-Type: application/json" \
-            -d '{}')
-          echo "routine fire HTTP status: $code"
-          [ "$code" = "200" ]
+        run: python3 scripts/trigger_report.py
