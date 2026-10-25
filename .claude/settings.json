@@ -1,8 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(git clone -q --depth 1 https://github.com/ehakantas/steam-stats *)",
-      "Bash(python3 -I /tmp/w3/repo/scripts/report.py *)"
-    ]
-  }
-}
