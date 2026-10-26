@@ -1,19 +1,21 @@
 {
- "generated_at": 1792932224,
+ "generated_at": 1793013128,
  "items": {
   "3823470755": {
    "title": "Floating Damage Numbers [Remastered]",
-   "total": 1,
-   "new_since_last": 0,
-   "seen_count": 0,
+   "total": 2,
+   "new_since_last": 1,
+   "seen_count": 1,
    "new_keywords": {},
    "keywords_total": {},
    "daily": {
-    "2026-10-22": 1
+    "2026-10-22": 1,
+    "2026-10-26": 1
    },
-   "last_comment_ts": 1792646642,
+   "last_comment_ts": 1792984546,
    "seen": [
-    "2176dc161fadad34"
+    "2176dc161fadad34",
+    "1ae347ab7899d633"
    ]
   },
   "3823299960": {
