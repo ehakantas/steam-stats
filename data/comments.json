@@ -1,10 +1,10 @@
 {
- "generated_at": 1793013128,
+ "generated_at": 1793097567,
  "items": {
   "3823470755": {
    "title": "Floating Damage Numbers [Remastered]",
    "total": 2,
-   "new_since_last": 1,
+   "new_since_last": 0,
    "seen_count": 1,
    "new_keywords": {},
    "keywords_total": {},
@@ -20,19 +20,23 @@
   },
   "3823299960": {
    "title": "2x Trophy Bonuses",
-   "total": 1,
-   "new_since_last": 0,
-   "seen_count": 0,
+   "total": 3,
+   "new_since_last": 2,
+   "seen_count": 2,
    "new_keywords": {},
    "keywords_total": {
     "update": 1
    },
    "daily": {
-    "2026-10-22": 1
+    "2026-10-22": 1,
+    "2026-10-27": 1,
+    "2026-10-26": 1
    },
-   "last_comment_ts": 1792671356,
+   "last_comment_ts": 1793084102,
    "seen": [
-    "4ded463f3f68897c"
+    "4ded463f3f68897c",
+    "0822be21eaf665e4",
+    "b419d45853fa8bee"
    ]
   },
   "3822703127": {
