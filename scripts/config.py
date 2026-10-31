@@ -3,7 +3,7 @@ from zoneinfo import ZoneInfo
 
 APPID = 292030  # The Witcher 3: Wild Hunt
 TR = ZoneInfo("Europe/Istanbul")  # every printed date/time is Istanbul time
-STALE_H = 36  # a snapshot older than this (hours) is reported as stale
+STALE_H = 84  # a snapshot or comment check older than this (hours) is reported as stale; the workflow runs every 3rd day (~72 h) plus delay
 
 # Comment keywords, matched at the START of a word in lower-cased text:
 # "bug" matches "bug", "bugs", "buggy" but not "debug"; "crash" matches "crashes", "crashing".
