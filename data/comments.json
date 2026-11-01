@@ -1,5 +1,5 @@
 {
- "generated_at": 1793444251,
+ "generated_at": 1793533996,
  "items": {
   "3823470755": {
    "title": "Floating Damage Numbers [Remastered]",
@@ -41,14 +41,18 @@
   },
   "3822703127": {
    "title": "Quick Mask Toggle (Remastered)",
-   "total": 0,
-   "new_since_last": 0,
-   "seen_count": 0,
+   "total": 1,
+   "new_since_last": 1,
+   "seen_count": 1,
    "new_keywords": {},
    "keywords_total": {},
-   "daily": {},
-   "last_comment_ts": null,
-   "seen": []
+   "daily": {
+    "2026-11-01": 1
+   },
+   "last_comment_ts": 1793491027,
+   "seen": [
+    "e7e39e0c7cb01220"
+   ]
   }
  },
  "errors": []
