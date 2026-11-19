@@ -1,38 +1,38 @@
 {
- "generated_at": 1794836696,
- "previous_generated_at": 1794575526,
+ "generated_at": 1795098567,
+ "previous_generated_at": 1794836696,
  "items": [
   {
    "id": "3823470755",
    "title": "Floating Damage Numbers [Remastered]",
-   "subscribers": 657,
-   "favorites": 48,
-   "views": 2002,
+   "subscribers": 668,
+   "favorites": 50,
+   "views": 2024,
    "comments": 3,
    "time_updated": 1792504781,
    "creator": "76561198087263686",
    "url": "https://steamcommunity.com/sharedfiles/filedetails/?id=3823470755",
    "delta": {
-    "subscribers": 13,
-    "favorites": 3,
-    "views": 35,
-    "comments": 1
+    "subscribers": 11,
+    "favorites": 2,
+    "views": 22,
+    "comments": 0
    }
   },
   {
    "id": "3823299960",
    "title": "2x Trophy Bonuses",
-   "subscribers": 1632,
-   "favorites": 116,
-   "views": 4656,
+   "subscribers": 1686,
+   "favorites": 121,
+   "views": 4781,
    "comments": 3,
    "time_updated": 1792472757,
    "creator": "76561198087263686",
    "url": "https://steamcommunity.com/sharedfiles/filedetails/?id=3823299960",
    "delta": {
-    "subscribers": 73,
-    "favorites": 6,
-    "views": 166,
+    "subscribers": 54,
+    "favorites": 5,
+    "views": 125,
     "comments": 0
    }
   },
@@ -41,15 +41,15 @@
    "title": "Quick Mask Toggle (Remastered)",
    "subscribers": 50,
    "favorites": 11,
-   "views": 1198,
+   "views": 1225,
    "comments": 1,
    "time_updated": 1792381153,
    "creator": "76561198087263686",
    "url": "https://steamcommunity.com/sharedfiles/filedetails/?id=3822703127",
    "delta": {
-    "subscribers": 4,
+    "subscribers": 0,
     "favorites": 0,
-    "views": 45,
+    "views": 27,
     "comments": 0
    }
   }
