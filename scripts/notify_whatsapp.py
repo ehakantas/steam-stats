@@ -34,8 +34,9 @@ new_tot = {"subscribers": 0, "views": 0}
 for n, i in enumerate(stats["items"]):
     d = i.get("delta") or {}
     if n < 8:  # keep the message short; totals below still cover every mod
-        lines.append(f"{i['title']}: {i['subscribers']}{delta(d.get('subscribers'))} abone, "
-                     f"{i['views']}{delta(d.get('views'))} görüntülenme")
+        lines += [f"{i['title']}:",
+                  f"{i['subscribers']}{delta(d.get('subscribers'))} abone,",
+                  f"{i['views']}{delta(d.get('views'))} görüntülenme"]
     for k in tot:
         if i.get(k) is None:  # Steam occasionally omits a counter; skip it instead of crashing
             continue
@@ -45,7 +46,7 @@ for n, i in enumerate(stats["items"]):
 dashboard = os.environ.get("DASHBOARD_URL", "").strip()
 now = datetime.datetime.now(TR).strftime("%d.%m %H:%M")
 text = "\n".join([f"Steam stats {now}", *lines,
-                  f"Toplam: {tot['subscribers']} abone, {tot['views']} görüntülenme",
+                  "Toplam:", f"{tot['subscribers']} abone,", f"{tot['views']} görüntülenme",
                   f"Yeni Görüntülenme: {new_tot['views']}",
                   f"Yeni abone: {new_tot['subscribers']}",
                   f"Yeni yorum: {new_comments}",
